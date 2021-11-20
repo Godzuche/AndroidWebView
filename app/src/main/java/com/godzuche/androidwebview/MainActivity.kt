@@ -2,9 +2,11 @@ package com.godzuche.androidwebview
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import com.godzuche.androidwebview.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -18,7 +20,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         webView = binding.wvGoogle
-        webView.webViewClient = myWebViewClient()
+        webView.webViewClient = object : myWebViewClient() {
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+                Toast.makeText(this@MainActivity, "Page loaded", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onReceivedError(
+                view: WebView?,
+                request: WebResourceRequest?,
+                error: WebResourceError?
+            ) {
+                super.onReceivedError(view, request, error)
+                Toast.makeText(this@MainActivity, "Error occurred!", Toast.LENGTH_SHORT).show()
+            }
+        }
         webView.loadUrl("https://google.com")
 
     }
@@ -31,7 +47,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //webViewClient to display the web page in the app instead of chrome browser
-    inner class myWebViewClient : WebViewClient() {
+    open inner class myWebViewClient : WebViewClient() {
         override fun shouldOverrideUrlLoading(
             view: WebView?,
             url: String,
