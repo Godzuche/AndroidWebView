@@ -12,5 +12,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        val webView = binding.wvGoogle
+        webView.loadUrl("https://google.com")
+
     }
 }
