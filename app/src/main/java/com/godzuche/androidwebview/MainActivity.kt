@@ -9,6 +9,7 @@ import com.godzuche.androidwebview.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var webView: WebView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,17 +17,24 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val webView = binding.wvGoogle
+        webView = binding.wvGoogle
         webView.webViewClient = myWebViewClient()
         webView.loadUrl("https://google.com")
 
     }
 
+    override fun onBackPressed() {
+        if (webView.canGoBack())
+            webView.goBack()
+        else
+            super.onBackPressed()
+    }
+
     //webViewClient to display the web page in the app instead of chrome browser
-    inner class myWebViewClient: WebViewClient() {
+    inner class myWebViewClient : WebViewClient() {
         override fun shouldOverrideUrlLoading(
             view: WebView?,
-            url: String
+            url: String,
         ): Boolean {
             view?.loadUrl(url)
             return true
